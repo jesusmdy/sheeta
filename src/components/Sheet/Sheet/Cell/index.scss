@@ -1,0 +1,13 @@
+.sheet-cell {
+  border: 1px solid var(--colorNeutralForegroundDisabled);
+  padding: 0 !important;
+  &.--current {
+    outline: 2px solid var(--colorNeutralForeground3BrandHover);
+  }
+  & > input {
+    height: 100%;
+    border: none;
+    background: none;
+    outline: none;
+  }
+}

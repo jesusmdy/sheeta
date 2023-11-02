@@ -1,0 +1,16 @@
+.editor-toolbars {
+  .toolbar {
+    display: flex;
+    align-items: center;
+    gap: var(--spacingHorizontalS);
+    &.options {
+      background-color: var(--colorNeutralForegroundInverted);
+      margin-inline: var(--spacingHorizontalS);
+      border-radius: var(--borderRadiusMedium);
+      box-shadow: var(--shadow4);
+    }
+    .field {
+      flex: 1;
+    }
+  }
+}

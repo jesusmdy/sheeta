@@ -1,0 +1,29 @@
+.sheet-header {
+  tr {
+    th {
+      &:nth-child(1) {
+        // background-color: red !important;
+        width: 50px;
+      }
+    }
+  }
+}
+
+.current {
+  background-color: var(--colorBrandBackground2);
+  color: var(--colorBrandBackgroundStatic);
+  font-weight: bold !important;
+}
+
+.row-header-cell {
+  padding: 0 !important;
+  text-align: center;
+}
+
+.column-header-cell {
+  border: 1px solid var(--colorNeutralForegroundDisabled);
+  & > div {
+    justify-content: center;
+    align-items: center;
+  }
+}
