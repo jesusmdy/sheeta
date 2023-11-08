@@ -1,4 +1,4 @@
-import { CellOptionsInterface, PositionInterface, addCell, defaultCell, selectCells, selectPosition, setColumnPosition, setRowPosition, updateCell } from '@/app/store/sheet/sheetSlicer';
+import { CellOptionsInterface, InlineStyleRangeInterface, PositionInterface, addCell, addCellInlineStyleRange, defaultCell, selectCells, selectPosition, setColumnPosition, setRowPosition, updateCell, updateCellInlineStyleRange } from '@/app/store/sheet/sheetSlicer';
 import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -27,6 +27,19 @@ const useCell = (
     [currentPosition, position]
   );
 
+  const currentInlineStyleRanges = useMemo(
+    () => {
+      return currentCell?.inlineStyleRanges || [];
+    },
+    [currentCell]
+  );
+
+  const hasInlineStyleRange = (inlineStyleRange: InlineStyleRangeInterface) => {
+    return currentInlineStyleRanges.some(
+      (v) => v.offset === inlineStyleRange.offset && v.length === inlineStyleRange.length && v.style === inlineStyleRange.style
+    );
+  }
+
   const addCellOptions = (value: string) => {
 
     const cell = {
@@ -36,9 +49,8 @@ const useCell = (
     };
 
     dispatch(
-      addCell(cell)
+      addCell(cell as CellOptionsInterface)
     );
-
   };
 
   const updateCellOptions = (value: CellOptionsInterface) => {
@@ -52,13 +64,29 @@ const useCell = (
     }
   };
 
+  const addCellInlineStyleRangeOption = (inlineStyleRange: InlineStyleRangeInterface) => {
+    if (currentCell) {
+      dispatch(addCellInlineStyleRange({position, inlineStyleRange}));
+    }
+  }
+
+  const updateCellInlineStyleRangeOption = (inlineStyleRange: InlineStyleRangeInterface) => {
+    if (currentCell) {
+      dispatch(updateCellInlineStyleRange({position, inlineStyleRange}));
+    }
+  }
+
   return {
     cells,
     currentCell,
     isCurrentPosition,
+    currentInlineStyleRanges,
     enableCell,
     addCellOptions,
-    updateCellOptions
+    updateCellOptions,
+    addCellInlineStyleRangeOption,
+    updateCellInlineStyleRangeOption,
+    hasInlineStyleRange
   };
 };
 

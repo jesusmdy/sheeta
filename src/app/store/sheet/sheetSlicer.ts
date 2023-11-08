@@ -2,6 +2,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '..';
 import _ from 'lodash';
 import { INLINE_STYLES } from '@/utils/text';
+import { findCell, findInlineStyleRange } from './utils';
 
 const rows = _.range(1, 101);
 const columns = _.range('A'.charCodeAt(0), 'Z'.charCodeAt(0) + 1);
@@ -40,10 +41,11 @@ export const defaultCell = {
     backgroundColor: '#fff',
     color: '#000',
     fontSize: '14px',
-  }
+  },
+  inlineStyleRanges: [],
 };
 
-interface SheetStateInterface {
+export interface SheetStateInterface {
   position: PositionInterface,
   rows: number[];
   columns: string[];
@@ -86,12 +88,25 @@ export const sheetSlice = createSlice({
       const index = state.cells.findIndex((v) => v.position.row === action.payload.position.row && v.position.column === action.payload.position.column);
       state.cells[index] = action.payload;
     },
+    addCellInlineStyleRange: (state, action: PayloadAction<{ position: PositionInterface, inlineStyleRange: InlineStyleRangeInterface }>) => {
+      const cell = findCell(state, action.payload.position);
+      if (cell) {
+        cell.inlineStyleRanges.push(action.payload.inlineStyleRange);
+      }
+    },
+    updateCellInlineStyleRange: (state, action: PayloadAction<{ position: PositionInterface, inlineStyleRange: InlineStyleRangeInterface }>) => {
+      const inlineStyleRange = findInlineStyleRange(state, action.payload.position, action.payload.inlineStyleRange);
+      if (inlineStyleRange) {
+        inlineStyleRange.style = action.payload.inlineStyleRange.style;
+      }
+    }
   },
 });
 
 export const {
   setPosition, setColumnPosition, setRowPosition,
-  setCells, addCell, removeCell, updateCell
+  setCells, addCell, removeCell, updateCell,
+  addCellInlineStyleRange, updateCellInlineStyleRange,
 } = sheetSlice.actions;
 
 export const selectPosition = (state: RootState) => state.sheet.position;
